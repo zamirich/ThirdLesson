@@ -8,11 +8,14 @@
 
 import Foundation
 
-//1. Описать несколько структур – любой легковой автомобиль SportCar и любой грузовик TrunkCar.
+//1. Описать несколько структур – любой легковой автомобиль SportCar и любой грузовик TrunkCar. - DONE
     //Why Trunk? it's Truck
-//2. Структуры должны содержать марку авто, год выпуска, объем багажника/кузова, запущен ли двигатель, открыты ли окна, заполненный объем багажника.
-//3. Описать перечисление с возможными действиями с автомобилем: запустить/заглушить двигатель, открыть/закрыть окна, погрузить/выгрузить из кузова/багажника груз определенного объема.
-//4. Добавить в структуры метод с одним аргументом типа перечисления, который будет менять свойства структуры в зависимости от действия.
+//2. Структуры должны содержать марку авто, год выпуска, объем багажника/кузова, запущен ли двигатель, открыты ли окна, заполненный объем багажника. - DONE
+//3. Описать перечисление с возможными действиями с автомобилем:
+//запустить/заглушить двигатель - DONE,
+//открыть/закрыть окна - DONE,
+//погрузить/выгрузить из кузова/багажника груз определенного объема - TODO
+//4. Добавить в структуры метод с одним аргументом типа перечисления, который будет менять свойства структуры в зависимости от действия.- DONE
 
 enum SportBrand {
     case porsche
@@ -29,6 +32,11 @@ enum TruckBrand {
     case volvo
 }
 
+enum EngineState { //trying this instead of boolean for engine state
+    case engineIsOn
+    case engineIsOff
+}
+
 enum EngineAction {
     case startEngine
     case stopEngine
@@ -43,52 +51,100 @@ struct SportCar {
     let brand: SportBrand
     let yearOfProduction: Int
     let trunkCapacity: Int
-    var engineIsOn: Bool
-//  TODO
-//        didSet {
-//            switch self {
-//            case .true:
-//                print("The engine is now On")
-//            case .false:
-//                print("The engine is now Off")
-//            }
-    var windowsAreOpen: Bool
+    var engineState: EngineState {
+        didSet {
+            switch engineState {
+            case .engineIsOn:
+                print("\(brand)'s engine is now On")
+            case .engineIsOff:
+                print("\(brand)'s engine is now Off")
+            }
+        }
+    }
+    var windowsAreOpen: Bool {
+        didSet {
+            switch windowsAreOpen {
+            case true:
+                print("\(brand)'s windows are now opened")
+            case false:
+                print("\(brand)'s windows are now closed")
+            }
+        }
+    }
     var trunkOccupancy: Int
     
     mutating func engine(action: EngineAction){
-        //TODO
+        switch action {
+        case .startEngine:
+            engineState = .engineIsOn
+        case .stopEngine:
+            engineState = .engineIsOff
         }
     }
+    
+    mutating func window(action: WindowsAction){
+        switch action {
+        case .openWindows:
+            windowsAreOpen = true
+        case .closeWindows:
+            windowsAreOpen = false
+        }
+    }
+}
 
 struct TruckCar {
     let brand: TruckBrand
     let yearOfProduction: Int
-    let trunkBodyCapacity: Int
-    var engineIsOn: Bool
+    let truckBodyCapacity: Int
+    var engineState: EngineState {
+        didSet {
+            switch engineState {
+            case .engineIsOn:
+                print("\(brand)'s engine is now On")
+            case .engineIsOff:
+                print("\(brand)'s engine is now Off")
+            }
+        }
+    }
     var windowsAreOpen: Bool
-    var trunkBodyOccupancy: Int
+    var truckBodyOccupancy: Int
     
-    mutating func engine(action: EngineAction) {
-        //TODO
+    mutating func engine(action: EngineAction){
+        switch action {
+        case .startEngine:
+            engineState = .engineIsOn
+        case .stopEngine:
+            engineState = .engineIsOff
+        }
     }
     
-    mutating func window(action: WindowsAction) {
-        //TODO
+    mutating func window(action: WindowsAction){
+        switch action {
+        case .openWindows:
+            windowsAreOpen = true
+        case .closeWindows:
+            windowsAreOpen = false
+        }
     }
 }
 
 //5. Инициализировать несколько экземпляров структур. Применить к ним различные действия.
 
-var mySportCar = SportCar(brand: .tesla, yearOfProduction: 2019, trunkCapacity: 100, engineIsOn: false, windowsAreOpen: false, trunkOccupancy: 0)
+var mySportCar = SportCar(brand: .tesla, yearOfProduction: 2019, trunkCapacity: 100, engineState: .engineIsOff, windowsAreOpen: false, trunkOccupancy: 0)
 
-var myTruckCar = TruckCar(brand: .kamaz, yearOfProduction: 2020, trunkBodyCapacity: 3_000, engineIsOn: false, windowsAreOpen: false, trunkBodyOccupancy: 1_000)
+var myTruckCar = TruckCar(brand: .kamaz, yearOfProduction: 2020, truckBodyCapacity: 3_000, engineState: .engineIsOff, windowsAreOpen: false, truckBodyOccupancy: 1_000)
 
 mySportCar.engine(action: .startEngine)
+mySportCar.engine(action: .stopEngine)
+mySportCar.window(action: .closeWindows)
+mySportCar.window(action: .openWindows)
+
 myTruckCar.window(action: .openWindows)
 
 //6. Вывести значения свойств экземпляров в консоль.
 
+print("")
 print(mySportCar.brand)
 print(myTruckCar.windowsAreOpen)
-
+print("")
 
