@@ -80,3 +80,11 @@ fastlane/test_output
 # https://github.com/johnno1962/injectionforxcode
 
 iOSInjectionProject/
+
+ThirdLesson.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+
+ThirdLesson.xcodeproj/project.xcworkspace/contents.xcworkspacedata
+
+ThirdLesson.xcodeproj/project.pbxproj
+
+.DS_Store
