@@ -14,7 +14,7 @@ import Foundation
 //3. Описать перечисление с возможными действиями с автомобилем:
 //запустить/заглушить двигатель - DONE,
 //открыть/закрыть окна - DONE,
-//погрузить/выгрузить из кузова/багажника груз определенного объема - TODO
+//погрузить/выгрузить из кузова/багажника груз определенного объема - DONE
 //4. Добавить в структуры метод с одним аргументом типа перечисления, который будет менять свойства структуры в зависимости от действия.- DONE
 
 enum SportBrand {
@@ -106,8 +106,24 @@ struct TruckCar {
             }
         }
     }
-    var windowsAreOpen: Bool
-    var truckBodyOccupancy: Int
+    var windowsAreOpen: Bool {
+        didSet {
+            switch windowsAreOpen {
+            case true:
+                print("\(brand)'s windows are now opened")
+            case false:
+                print("\(brand)'s windows are now closed")
+            }
+        }
+    }
+    var truckBodyOccupancy: Int {
+        willSet {
+            print("\(brand)'s available occupancy was \(truckBodyOccupancy) out of \(truckBodyCapacity)")
+        }
+        didSet {
+            print("\(brand)'s current occupancy is \(truckBodyOccupancy) out of \(truckBodyCapacity)")
+        }
+    }
     
     mutating func engine(action: EngineAction){
         switch action {
@@ -126,6 +142,17 @@ struct TruckCar {
             windowsAreOpen = false
         }
     }
+    
+    mutating func loadCargoInTruck(of weight: Int){
+        if truckBodyOccupancy == truckBodyCapacity {
+            print("This truck is full. You can't put cargo in it anymore")
+        } else if weight > (truckBodyCapacity - truckBodyOccupancy) {
+            print("The cargo is too heavy. You can't put all into the truck")
+        } else {
+            print("\(weight) of cargo were placed into the truck")
+            truckBodyOccupancy += weight
+        }
+    }
 }
 
 //5. Инициализировать несколько экземпляров структур. Применить к ним различные действия.
@@ -141,10 +168,15 @@ mySportCar.window(action: .openWindows)
 
 myTruckCar.window(action: .openWindows)
 
+myTruckCar.loadCargoInTruck(of: 5_000) //проверим, что невозможно погрузить в кузов больше его остаточной вместимости
+myTruckCar.loadCargoInTruck(of: 1_100)
+
 //6. Вывести значения свойств экземпляров в консоль.
 
 print("")
 print(mySportCar.brand)
 print(myTruckCar.windowsAreOpen)
+print(myTruckCar.truckBodyOccupancy)
+print(myTruckCar.truckBodyCapacity)
 print("")
 
