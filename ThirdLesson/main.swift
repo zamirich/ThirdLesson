@@ -180,3 +180,4 @@ print(myTruckCar.truckBodyOccupancy)
 print(myTruckCar.truckBodyCapacity)
 print("")
 
+print()
